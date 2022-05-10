@@ -136,6 +136,10 @@ function initDT() {
     }),
     order: [[sortColumnIdx, 'desc']],
     // paging: false,
+    lengthMenu: [
+      [25, 50, -1],
+      [25, 50, 'All'],
+    ],
     searchBuilder: {
       // all options at default
     },
@@ -145,10 +149,15 @@ function initDT() {
   table.searchBuilder.container().prependTo(table.table().container());
 }
 
-function fetchAndShowOrigin(repo) {
+function getRepoName(repo) {
   repo = repo.replace('https://github.com/', '');
   repo = repo.replace('http://github.com/', '');
   repo = repo.replace(/\.git$/, '');
+  return repo;
+}
+
+function fetchAndShowOrigin(repo) {
+  repo = getRepoName(repo);
 
   fetch(`https://api.github.com/repos/${repo}`)
     .then((response) => {
@@ -170,9 +179,7 @@ function fetchAndShowOrigin(repo) {
 }
 
 function fetchAndShow(repo) {
-  repo = repo.replace('https://github.com/', '');
-  repo = repo.replace('http://github.com/', '');
-  repo = repo.replace(/\.git$/, '');
+  repo = getRepoName(repo);
 
   fetch(
     `https://api.github.com/repos/${repo}/forks?sort=stargazers&per_page=100`
